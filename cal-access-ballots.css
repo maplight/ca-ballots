@@ -1,0 +1,57 @@
+/* section headers on individual proposition page */
+.section_headers {
+	padding: 30px 0px 15px;
+	border-bottom: solid 1px #333;
+	text-transform: uppercase;
+	font-weight: bold;
+}
+
+.section_sub_headers {
+	font-size: 20px;
+	padding: 15px 0px 0px;
+	border-bottom: solid 1px #333;
+	margin-bottom: 15px;
+}
+
+.floated_section_sub_headers {
+	float: left;
+	padding: 0px 25px 0px 0px;
+}
+
+.section_header_padding {
+	padding: 10px 0px 30px 0px;
+}
+
+.prop_dropdown {
+	border: solid 1px #787878;
+    border-radius: 0px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-weight: bold;
+    background-image: none;
+}
+
+.prop-dropdown-menu {
+	border-radius: 0px;
+	border: solid 1px #8c8c8c;
+}
+
+a.breadcrumbs {
+	color: #003466;
+	text-decoration: underline;
+}
+
+a:hover.breadcrumbs {
+	color: #003466;
+	text-decoration: none;
+}
+
+.h2, h2 {
+	font-size: 1.313em;
+}
+
+
+.h3, h3 {
+	font-size: 1.17em;
+}
+
