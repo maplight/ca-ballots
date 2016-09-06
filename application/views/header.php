@@ -20,6 +20,9 @@
 	<!-- Latest compiled and minified JavaScript -->
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
+
+	<script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/1.4.5/numeral.min.js"></script>
+
 	<!-- d3.js visualization library -->
 	<!-- <script src="https://d3js.org/d3.v4.min.js"></script> -->
 	<!-- <script src="http://d3js.org/d3.v3.min.js"></script>
@@ -33,7 +36,7 @@
 </head>
 <body>
 <div class="container" style="font-size: 14px;margin-top: 40px;">
-	<div style="margin-bottom: 20px;font-weight: bold;font-size: 14px;">
+	<div style="margin-bottom: 20px;padding-top: 10px;font-weight: bold;font-size: 14px; float: left;">
 	<?php
 
 	// all routes as specified in config/routes.php, reserved because Codeigniter matched route from last element in array to first

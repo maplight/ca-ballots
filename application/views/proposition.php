@@ -1,91 +1,106 @@
-<!-- prop $title should go here -->
-<div style="font-weight:bold;margin-bottom:30px;">
-    <div class="row">
-        <div class="col-sm-2" style="padding-right:24px;">
-            <div style="font-size:15px;">PROP</div>
-            <div style="font-size:42px;"><?php echo $proposition["number"]; ?></div>
-        </div>
-        <h2 class="col-sm-10" style="font-weight:bold;">
-            <?php echo $proposition['name']; ?>
-        </h2>
-    </div>
-</div>
+<div style="vertical-align: middle;" class="nav">
+    <div class="form-inline" style="float: right;">
+        <?php
+        $totalProps = count($propositions["propositions"]);
+        $currentProp = $this->uri->segment(3, $propositions["propositions"][0]->number);
+        $prevProp = "";
+        $nextProp = "";
+        $props = $propositions["propositions"];
+        $nextPropName = "";
+        $prevPropName = "";
 
-<div class="form-inline">
-    <?php
-    $totalProps = count($propositions["propositions"]);
-    $currentProp = $this->uri->segment(3, $propositions["propositions"][0]->number);
-    $prevProp = "";
-    $nextProp = "";
-    $props = $propositions["propositions"];
+        // find active prop so we can set paging buttons
+        for ($x = 0; $x < $totalProps; $x++) {
+            $proposition_item = $props[$x];
 
-    // find active prop so we can set paging buttons
-    for ($x = 0; $x < $totalProps; $x++) {
-        $proposition_item = $props[$x];
+            if ($currentProp == $proposition_item->number) {
 
-        if ($currentProp == $proposition_item->number) {
-
-            // don't show a previous prop if we are at index 0
-            if ($totalProps > 1 && $x > 0) {
-                $prevPropIndex = $x - 1;
-                if ($prevPropIndex != -1) {
-                    $prevProp = $props[$prevPropIndex]->number;
+                // don't show a previous prop if we are at index 0
+                if ($totalProps > 1 && $x > 0) {
+                    $prevPropIndex = $x - 1;
+                    if ($prevPropIndex != -1) {
+                        $prevProp = $props[$prevPropIndex]->number;
+                        $prevPropName = $props[$prevPropIndex]->name;
+                    }
                 }
-            }
 
-            // don't show next prop if we are at end of array
-            if ($totalProps > 1 && $x < $totalProps - 1) {
-                $nextPropIndex = $x + 1;
-                $nextProp = $props[$nextPropIndex]->number;
-            }
+                // don't show next prop if we are at end of array
+                if ($totalProps > 1 && $x < $totalProps - 1) {
+                    $nextPropIndex = $x + 1;
+                    $nextProp = $props[$nextPropIndex]->number;
+                    $nextPropName = $props[$nextPropIndex]->name;
+                }
 
-            // we've got prevProp and nextProp set,
-            // so we can break on outta here
-            break;
+                // we've got prevProp and nextProp set,
+                // so we can break on outta here
+                break;
+            }
         }
-    }
-    ?>
+        ?>
 
-    <!-- all props drop down -->
-    <div class="form-group" <?php if ($prevProp != "") {
-        echo "style='padding-right: 10px;'";
-    } ?>>
-        <a href="<?php echo base_url() . 'propositions/' . $this->uri->segment(2) . '/' . $prevProp; ?>"><?php if ($prevProp != "") {
-                echo '<- Prop ' . $prevProp;
-            } ?></a>
-    </div>
 
-    <div class="form-group" style="padding-right: 10px;">
-        <div class="dropdown">
-            <button class="btn btn-default dropdown-toggle prop_dropdown" type="button" id="dropdownMenu1"
-                    data-toggle="dropdown" aria- haspopup="true" aria-expanded="true">
-                Prop <?php echo $currentProp; ?>
-                <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu prop-dropdown-menu" aria-labelledby="dropdownMenu1">
-                <?php
-                foreach ($propositions["propositions"] as $proposition_item) {
-                    ?>
-                    <li>
-                        <a href="<?php echo base_url() . 'propositions/' . $this->uri->segment(2) . '/' . $proposition_item->number; ?>">
-                            Prop <?php echo $proposition_item->number; ?>
-                            - <?php echo substr($proposition_item->name, 0, 50);
-                            if (strlen($proposition_item->name) > 50) {
-                                echo "...";
-                            } ?>
-                        </a>
-                    </li>
-                <?php } ?>
-            </ul>
+        <!-- all props drop down -->
+        <div class="form-group" <?php if ($prevProp != "") {
+            echo "style='padding-right: 10px;'";
+        } ?>>
+
+            <a href="<?php echo base_url() . 'propositions/' . $this->uri->segment(2) . '/' . $prevProp; ?>"><?php if ($prevProp != "") {
+                    echo "<div  style='font-size:30px; vertical-align: middle;' class='glyphicon glyphicon-menu-left gi-2x'></div>
+
+                    <div  style='float: right; padding-top: 6px;' id='link-text'>" . 'Prop ' . $prevProp . "</div>";
+                } ?></a></a>
+        </div>
+
+        <div class="form-group" style="padding-right: 10px;">
+            <div class="dropdown">
+                <button class="btn btn-default dropdown-toggle prop_dropdown" type="button" id="dropdownMenu1"
+                        data-toggle="dropdown" aria- haspopup="true" aria-expanded="true">
+                    Prop <?php echo $currentProp; ?>
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu prop-dropdown-menu" aria-labelledby="dropdownMenu1">
+                    <?php
+                    foreach ($propositions["propositions"] as $proposition_item) {
+                        ?>
+                        <li>
+                            <a href="<?php echo base_url() . 'propositions/' . $this->uri->segment(2) . '/' . $proposition_item->number; ?>">
+                                Prop <?php echo $proposition_item->number; ?>
+                                - <?php echo substr($proposition_item->name, 0, 50);
+                                if (strlen($proposition_item->name) > 50) {
+                                    echo "...";
+                                } ?>
+                            </a>
+                        </li>
+                    <?php } ?>
+                </ul>
+            </div>
+        </div>
+
+        <div style="font-size:15px; vertical-align: middle;" class="form-group">
+            <a href="<?php echo base_url() . 'propositions/' . $this->uri->segment(2) . '/' . $nextProp; ?>"><?php if ($nextProp != "") {
+                    echo "<div  style='float: left; padding-top: 6px;' id='link-text'>" . 'Prop ' . $nextProp . "</div>
+                    <div style='font-size:30px; vertical-align: middle;' class='glyphicon glyphicon-menu-right gi-2x'></div>";
+                } ?>
+
+            </a>
         </div>
     </div>
+</div>
 
-    <div class="form-group">
-        <a href="<?php echo base_url() . 'propositions/' . $this->uri->segment(2) . '/' . $nextProp; ?>"><?php if ($nextProp != "") {
-                echo 'Prop ' . $nextProp . ' ->';
-            } ?></a>
+
+<!-- prop $title should go here -->
+<div>
+    <div class="row no-gutter">
+        <div class="col-sm-1">
+            <div style="font-size:20px; margin-bottom: -20px; margin-top: 20px; font-weight: bold;">PROP</div>
+            <div style="font-size:55px;"><?php echo $proposition["number"]; ?></div>
+        </div>
+        <h1 class="col-sm-11">
+            <?php echo $proposition['name']; ?>
+        </h1>
     </div>
 </div>
+
 
 <div>
     <h3 class="section_headers">
@@ -101,11 +116,38 @@
         Money Raised
     </h3>
 
-    <div id="chartContainer" class="container" style="height: 150px;">
+    <div>
+        <p>
+            Chart depicts total fundraising by all committees primarily formed for and against
+            Prop <?php echo $proposition["number"]; ?>
+        </p>
+    </div>
+    <div id="chartContainer" class="container" style="  float:left; height: 150px;">
 
     </div>
 
+    <?php
+    $amountYesFormat = '${y}';
+    $amountNoFormat = '${y}';
+
+    if ($proposition['money_raised'][0]->AmountNo >= 1000000) {
+        $amountNoFormat = '${y} million';
+    }
+    if ($proposition['money_raised'][0]->AmountYes >= 1000000) {
+        $amountYesFormat = '${y} million';
+    }
+
+    ?>
+
+
+    <div id="amountYesModId" data-amountraw="<?php echo $proposition['money_raised'][0]->AmountYes ?>"
+         data-amountmod="<?php echo $proposition['money_raised'][0]->AmountYesMod; ?>"></div>
+    <div id="amountNoModId" data-amountraw=" <?php echo $proposition['money_raised'][0]->AmountNo ?>"
+         data-amountmod="<?php echo $proposition['money_raised'][0]->AmountNoMod; ?>"></div>
+
     <script type="text/javascript">
+
+
         $(function () {
             $('#chartContainer').highcharts({
                 chart: {
@@ -118,11 +160,13 @@
                     text: null
                 },
                 xAxis: {
+                    type: 'category',
                     categories: ['Yes on Prop <?php echo $currentProp; ?>', 'No on Prop <?php echo $currentProp; ?>'],
                     title: {
                         text: null
                     },
                     labels: {
+
                         style: {
                             fontSize: '16px',
                             fontFamily: 'sans-serif',
@@ -143,20 +187,11 @@
                     gridLineWidth: 0
 
                 },
-                tooltip: {
-                    valueSuffix: ' millions'
-                },
+
                 plotOptions: {
                     bar: {
-                        dataLabels: {
-                            enabled: true,
-                            style: {
-                                fontSize: '16px',
-                                fontFamily: 'sans-serif',
-                                fontWeight: 'normal'
-                            }
-                        },
-                        colors: ['#1b3764', '#959595'],
+
+
                         colorByPoint: true
                     }
                 },
@@ -164,12 +199,84 @@
                     enabled: false
                 },
                 series: [{
+
+                    dataLabels: {
+                        enabled: true,
+                        formatter: function () {
+
+                            var value =  $('#amountYesModId').data('amountmod');
+                            var rawValue = $('#amountYesModId').data('amountraw');
+
+
+                            if (rawValue >= 1000000) {
+                                value = value + ' million';
+                            }else{
+                                var number = numeral(value);
+
+                                value= number.format('0,0');
+
+                            }
+
+                            return '$' + value;
+                        },
+
+                        style: {
+                            fontSize: '16px',
+                            fontFamily: 'sans-serif',
+                            fontWeight: 'normal'
+                        }
+                    },
                     showInLegend: false,
+
+                    pointWidth: 50,
                     data: [
-                        <?php echo $proposition['money_raised'][0]->AmountYes; ?>,
-                        <?php echo $proposition['money_raised'][0]->AmountNo; ?>
+                        {
+                            color: "#0A6ABA",
+                            y:  <?php echo $proposition['money_raised'][0]->AmountYes; ?>,
+                            name: 'Yes on Prop <?php echo $currentProp; ?>',
+
+                        }
                     ]
-                }]
+
+                }, {
+
+                    showInLegend: false,
+
+                    dataLabels: {
+                        enabled: true,
+                        formatter: function () {
+
+                            var value =  '$' + $('#amountNoModId').data('amountmod');
+                            var rawValue = $('#amountNoModId').data('amountraw');
+//
+                           if(rawValue >= 1000000){
+                               value = value + ' million';
+                           }
+
+                            return value;
+                        },
+
+
+                        style: {
+                            fontSize: '16px',
+                            fontFamily: 'sans-serif',
+                            fontWeight: 'normal'
+                        }
+                    },
+                    pointWidth: 60,
+                    data: [
+                        {
+                            color: '#054376',
+
+                            y:  <?php echo $proposition['money_raised'][0]->AmountNo; ?>,
+                            name: 'No on Prop <?php echo $currentProp; ?>',
+
+                        }
+                    ]
+
+                }
+
+                ]
             });
         });
     </script>
@@ -180,8 +287,19 @@
 
 <div>
     <h3 class="section_headers">
-        Biggest Contributors
+        Largest Contributions
     </h3>
+
+    <div>
+        <p style="margin-top: 15px;">
+            Showing the 5 largest contributions, including any ties, to committees primarily formed for and against Prop
+            53.
+            Contributions between allied committees are excluded. For more information on funding for ballot measure
+            campaigns, visit our Campaign Finance <a href="http://powersearch.sos.ca.gov/" target="_blank">Power
+                Search</a>.
+        </p>
+    </div>
+
 
     <div class="row">
         <div class="col-md-6">
@@ -194,21 +312,33 @@
                     <div class="row" style="margin-bottom: 10px;">
                         <div class="col-xs-6">
                             <?php echo $item->Donor; ?><br/>
-                            <span style="font-size:12px;"> <?php echo $item->Date; ?></span>
+                            <?php if ($proposition['top_contributors']['show_unitemized_support']) { ?>
+                                <span style="font-size:12px;"> <?php echo $proposition['unitemized_text']; ?></span>
+                            <?php } else { ?>
+                                <span style="font-size:12px; color: #767676; "> <?php echo $item->Date; ?></span>
+                            <?php } ?>
+
                         </div>
-                        <div class="col-xs-6">
+                        <div style="padding-right: 100px;text-align: right;" class="col-xs-6">
                             <?php echo $item->Amount; ?>
                         </div>
                     </div>
 
                 <?php } ?>
+
+                <div style="margin-top: 30px;">
+                    <a href="<?php echo $proposition["number"]; ?>/contributions/no">More Contributions to Yes
+                        on <?php echo $proposition_number; ?></a>
+                </div>
+
+
+            <?php } else { ?>
+
+                <div style="margin-top: 30px;">
+                    No contributions have been reported to the Yes on <?php echo $proposition["number"]; ?> campaign.
+
+                </div>
             <?php } ?>
-
-
-            <div style="margin-top: 30px;">
-                <a href="<?php echo $proposition["number"]; ?>/contributions/yes">More Contributions to Yes
-                    on <?php echo $proposition_number; ?></a>
-            </div>
         </div>
 
         <div class="col-md-6">
@@ -217,32 +347,43 @@
             </h4>
 
             <?php if (isset($proposition['top_contributors']['OPPOSE'])) { ?>
+                <?php $showMoreLink = true; ?>
                 <?php foreach ($proposition['top_contributors']['OPPOSE'] as $item) { ?>
                     <div class="row" style="margin-bottom: 10px;">
                         <div class="col-xs-6">
                             <?php echo $item->Donor; ?><br/>
-                            <span style="font-size:12px;"> <?php echo $item->Date; ?></span>
+                            <?php if ($proposition['top_contributors']['show_unitemized_oppose'] && $item->Date == null) { ?>
+                                <?php $showMoreLink = false; ?>
+                                <span style="font-size:12px;"> <?php echo $proposition['unitemized_text'] ?></span>
+                            <?php } else { ?>
+                                <span style="font-size:12px; color: #767676;"> <?php echo $item->Date; ?></span>
+                            <?php } ?>
                         </div>
-                        <div class="col-xs-6">
+                        <div style="padding-right: 100px;text-align: right;" class="col-xs-6">
                             <?php echo $item->Amount; ?>
                         </div>
                     </div>
 
                 <?php } ?>
-            <?php } ?>
 
-            <div style="margin-top: 30px;">
-                <a href="<?php echo $proposition["number"]; ?>/contributions/no">More Contributions to No
-                    on <?php echo $proposition_number; ?></a>
-            </div>
+                <?php if($showMoreLink) { ?>
+                <div style="margin-top: 30px;">
+                    <a href="<?php echo $proposition["number"]; ?>/contributions/no">More Contributions to No
+                        on <?php echo $proposition_number; ?></a>
+                </div>
+                <?php } ?>
+
+            <?php } else { ?>
+
+                <div style="margin-top: 30px;">
+                    No contributions have been reported to the No on <?php echo $proposition["number"]; ?> campaign.
+
+                </div>
+            <?php } ?>
         </div>
     </div>
 
-    <p style="margin-top: 15px;">
-        Showing the 5 largest contributions, including any ties, to committees primarily formed for and against Prop 53.
-        Contributions between allied committees are excluded. For more information on funding for ballot measure
-        campaigns, visit our Campaign Finance <a href="http://powersearch.sos.ca.gov/" target="_blank">Power Search</a>.
-    </p>
+
 </div>
 
 <div>
@@ -259,7 +400,7 @@
 </div>
 
 <div>
-    <h3 class="section_headers">
+    <h3 class="section_headers ">
         What your vote means
     </h3>
 
@@ -282,7 +423,6 @@
                 No
             </h3>
 
-
             <p>
                 <?php echo $proposition['text'][0]->WhatYourVoteMeansNo; ?>
             </p>
@@ -301,13 +441,6 @@
         <a href="http://voterguide.sos.ca.gov/" target="_blank">California Information Voter Guide</a>.
     </p>
 
-    <p>
-        <a href="http://registertovote.ca.gov/" target="_blank">Register to vote</a>
-    </p>
-
-    <p>
-        <a href="http://www.sos.ca.gov/elections/polling-place/" target="_blank">Find your polling place</a>
-    </p>
 </div>
 
 <div>
@@ -345,7 +478,7 @@
 
     <div class="row">
         <div class="col-md-6">
-            <h3 style="margin-top: 15px;">
+            <h3 class="floated_section_sub_headers_contact" style="margin-top: 10px;">
                 For
             </h3>
 
@@ -355,7 +488,7 @@
         </div>
 
         <div class="col-md-6">
-            <h3 style="margin-top: 15px;">
+            <h3 class="floated_section_sub_headers_contact" style="margin-top: 10px;">
                 Against
             </h3>
 
@@ -364,3 +497,55 @@
         </div>
     </div>
 </div>
+<div>
+    <h3 class="section_headers">
+        Vote
+    </h3>
+
+    <div class="row">
+        <div class="col-md-12">
+            <ul>
+                <li style=" padding-bottom: 10px;"><a style="text-decoration: underline;"
+                                                      href="http://registertovote.ca.gov/" target="_blank">Register to
+                        vote</a></li>
+                <li><a style="text-decoration: underline;" href="http://www.sos.ca.gov/elections/polling-place/"
+                       target="_blank">Find your polling place</>
+                </li>
+            </ul>
+
+        </div>
+    </div>
+
+    <div style="text-align: center;margin-top: 20px;" class="row">
+        <div style="vertical-align: middle;" class="col-md-6">
+            <div class="form-group"
+
+
+                <?php if ($prevProp != "") {
+                    echo "style='padding-right: 10px; text-align: center;'";
+                } ?>>
+                <a style="float: left"
+                   href="<?php echo base_url() . 'propositions/' . $this->uri->segment(2) . '/' . $prevProp; ?>"><?php if ($prevProp != "") {
+                        echo "<div  style='font-size:30px; float: left;' class='glyphicon glyphicon-menu-left gi-2x'></div>
+
+                    <div  style='font-size:20px;float: left; ' id='link-text'>" . 'Prop ' . $prevProp . "</div>";
+                    } ?></a><?php echo "<div style=' font-size:12px;margin-left: 10px;text-align: left; float: left; width: 50%;'>" . $prevPropName . "</div>" ?>
+            </div>
+
+        </div>
+        <div class="col-md-6">
+
+            <div class="form-group">
+
+
+                <a href="<?php echo base_url() . 'propositions/' . $this->uri->segment(2) . '/' . $nextProp; ?>"><?php if ($nextProp != "") {
+                        echo " <div style='font-size:30px; float: right' class='glyphicon glyphicon-menu-right gi-2x'></div> <div  style='font-size:20px;float: right; ' id='link-text'>" . 'Prop ' . $nextProp . "</div>";
+                    } ?>
+
+                </a>
+                <?php echo "<div style='margin-right: 10px;text-align: right;width: 50%; float: right; font-size:12px; id='nextPropName'>" . $nextPropName . '</div>'; ?>
+            </div>
+
+        </div>
+    </div>
+
