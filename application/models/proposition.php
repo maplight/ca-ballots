@@ -27,10 +27,14 @@ class Proposition extends CI_Model
 
         $results = array();
 
-        $this->db->select('PropositionID, number, name,Election');
-        $this->db->where(array('Election' => $date));
-        $this->db->order_by("number", "asc");
-        $query = $this->db->get('caballot_propositions');
+        $query = $this->db->query(
+            "select props.PropositionID, number, Title as name, Election
+            from caballot_propositions props
+            join caballot_proposition_languages lang
+            on props.PropositionID = lang.PropositionID
+            where Election = '".$date."'"
+        );
+
         $results['propositions'] = $query->result();
         $results['propositions_count'] = count($results['propositions']);
         return $results;
@@ -126,7 +130,7 @@ class Proposition extends CI_Model
 
         $this->db->select(' Position,DonorCounter,Donor,Amount, Date');
         //$this->db->where(array('PropositionID' => $id, 'DonorCounter <=' => '5', 'DonorCounter !=' => '0'));
-        $this->db->where(array('PropositionID' => $id, 'DonorCounter <=' => '5'));
+        $this->db->where(array('PropositionID' => $id, 'DonorCounter <=' => '10'));
         $this->db->order_by("Counter", "asc");
         $query = $this->db->get('caballot_proposition_donors');
         if ($data = $query->result()) {
@@ -146,10 +150,10 @@ class Proposition extends CI_Model
             }
 
 
-            if (isset($results['prop_obj']['top_contributors']['OPPOSE']) && count($results['prop_obj']['top_contributors']['OPPOSE']) > 5) {
+            if (isset($results['prop_obj']['top_contributors']['OPPOSE']) && count($results['prop_obj']['top_contributors']['OPPOSE']) > 10) {
                 array_pop($results['prop_obj']['top_contributors']['OPPOSE']);
             }
-            if (isset($results['prop_obj']['top_contributors']['SUPPORT']) && count($results['prop_obj']['top_contributors']['SUPPORT']) > 5) {
+            if (isset($results['prop_obj']['top_contributors']['SUPPORT']) && count($results['prop_obj']['top_contributors']['SUPPORT']) > 10) {
                 array_pop($results['prop_obj']['top_contributors']['SUPPORT']);
             }
 

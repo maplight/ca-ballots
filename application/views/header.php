@@ -50,10 +50,12 @@
 
 		// does the RegEx match?
 		if (preg_match('#^'.$key.'$#', $this->uri->uri_string(), $matches)) break;
+		$route = '';
+
 	}
 
-	// if the route is blank, it can only be mathcing the default route.
-	if ( ! $route) $route = $routes['default_route'];
+	// if the route is blank, it can only be matching the default route.
+	if (!$route || $route != '') $route = $routes['default_controller'];
 
 	// build the breadcrumb based off of the current route
 	$breadcrumb = "<a class='breadcrumbs' href='".base_url()."propositions'>Home</a>";

@@ -1,4 +1,4 @@
-<div style="margin-top: 30px;">
+<div style="margin-top: 30px; padding-top: 30px; padding-left: 15px;">
     <div style="display: inline;"><span
             style="font-size: 1.688em;font-weight:bold;">California Ballot Measures</span><span
             style="font-size: 14px;"> in the </span></div>
@@ -39,7 +39,9 @@
 
     <div class="row no-gutter" style="padding: 15px;  display: flex; align-items: center;">
         <div class="col-sm-1 hidden-xs" style="text-align: left;  vertical-align: top;">
-            <img src="<?php echo base_url(); ?>static/images/ballot_icon.jpg"/>
+			<a href="<?php echo base_url() . 'propositions/' . $proposition_item->Election . '/' . $proposition_item->number ?>">
+				<img alt="" src="<?php echo base_url(); ?>static/images/ballot_icon.jpg"/>
+			</a>
         </div>
         <div class="col-sm-1 col-xs-12">
             <div style="float: left;margin-right: 25px;">
@@ -54,8 +56,11 @@
         </div>
         <div class="col-sm-10 col-xs-12">
             <div>
-
-                <h1 style="font-size:1.125em; "><?php echo $proposition_item->name ?></h1>
+                <a href="<?php echo base_url() . 'propositions/' . $proposition_item->Election . '/' . $proposition_item->number ?>">
+					<h1 style="font-size:1.125em;color:#333;">
+						<?php echo $proposition_item->name ?>
+					</h1>
+				</a>
             </div>
         </div>
     </div>
