@@ -40,7 +40,7 @@
 
 
         <!-- all props drop down -->
-        <div class="form-group" <?php if ($prevProp != "") {
+        <div class="form-group hidden-sm hidden-xs" <?php if ($prevProp != "") {
             echo "style='padding-right: 10px;'";
         } ?>>
 
@@ -51,14 +51,14 @@
                 } ?></a></a>
         </div>
 
-        <div class="form-group" style="padding-right: 10px;">
+        <div class="form-group hidden-xs hidden-sm" style="padding-right: 10px;">
             <div class="dropdown">
                 <button class="btn btn-default dropdown-toggle prop_dropdown" type="button" id="dropdownMenu1"
                         data-toggle="dropdown" aria- haspopup="true" aria-expanded="true">
                     Prop <?php echo $currentProp; ?>
                     <span class="caret"></span>
                 </button>
-                <ul class="dropdown-menu prop-dropdown-menu" aria-labelledby="dropdownMenu1">
+                <ul class="dropdown-menu prop-dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
                     <?php
                     foreach ($propositions["propositions"] as $proposition_item) {
                         ?>
@@ -76,7 +76,7 @@
             </div>
         </div>
 
-        <div style="font-size:15px; vertical-align: middle;" class="form-group">
+        <div style="font-size:15px; vertical-align: middle;" class="form-group hidden-sm hidden-xs">
             <a href="<?php echo base_url() . 'propositions/' . $this->uri->segment(2) . '/' . $nextProp; ?>"><?php if ($nextProp != "") {
                     echo "<div  style='float: left; padding-top: 6px;' id='link-text'>" . 'Prop ' . $nextProp . "</div>
                     <div style='font-size:30px; vertical-align: middle;' class='glyphicon glyphicon-menu-right gi-2x'></div>";
@@ -91,11 +91,14 @@
 <!-- prop $title should go here -->
 <div>
     <div class="row no-gutter">
-        <div class="col-sm-1">
+        <div class="col-sm-2">
             <div style="font-size:20px; margin-bottom: -20px; margin-top: 20px; font-weight: bold;">PROP</div>
             <div style="font-size:55px;"><?php echo $proposition["number"]; ?></div>
         </div>
-        <h1 class="col-sm-11">
+        <h1 class="col-sm-10 hidden-xs hidden-sm">
+            <?php echo $proposition['name']; ?>
+        </h1>
+        <h1 class="col-sm-10 hidden-md hidden-lg" style="font-size: 24px;">
             <?php echo $proposition['name']; ?>
         </h1>
     </div>
@@ -266,7 +269,7 @@
               	]	
             }, function(chartObj) {
 		    	$.each(chartObj.series[0].data, function(i, point) {
-			        console.log('point.dataLabel: ', point.dataLabel);
+			        // console.log('point.dataLabel: ', point.dataLabel);
 			        // if(i % 2 == 0) {
 			        //     point.dataLabel.attr({y: point.dataLabel.y - 15});
 			        // } else {
@@ -301,25 +304,25 @@
 
 
     <div class="row">
-        <div class="col-md-6">
-            <h4>
-                Yes on Prop <?php echo $proposition_number; ?>
+        <div class="col-xs-6" style="margin-bottom:30px;">
+            <h4 style="background-color: #ebebeb;margin: 0px;padding: 15px;">
+                <span style="color:#0A6ABA;">Yes</span> on Prop <?php echo $proposition_number; ?>
             </h4>
 
             <?php if (isset($proposition['top_contributors']['SUPPORT'])) { ?>
                 <?php $showMoreYesLink = true; ?>
                 <?php foreach ($proposition['top_contributors']['SUPPORT'] as $item) { ?>
-                    <div class="row" style="margin-bottom: 10px;">
-                        <div class="col-xs-6">
+                    <div class="row" style="background-color: #ebebeb;padding: 10px 0px;margin: 0px;">
+                        <div class="col-xs-6" style="width: 50%;">
                             <?php echo $item->Donor; ?><br/>
                             <?php if ($proposition['top_contributors']['show_unitemized_support'] && $item->Date == null) { ?>
                                 <?php $showMoreYesLink = false; ?>
                                 <span style="font-size:12px;"> <?php echo $proposition['unitemized_text'] ?></span>
                             <?php } else { ?>
-                                <span style="font-size:12px; color: #767676;"> <?php echo $item->Date; ?></span>
+                                <span style="font-size:12px; color: #6a6a6a;"> <?php echo $item->Date; ?></span>
                             <?php } ?>
                         </div>
-                        <div style="padding-right: 100px;text-align: right;" class="col-xs-6">
+                        <div class="col-xs-6" style="text-align: right;width: 50%;">
                             <?php echo $item->Amount; ?>
                         </div>
                     </div>
@@ -327,7 +330,7 @@
                 <?php } ?>
 
                 <?php if($showMoreYesLink) { ?>
-                <div style="margin-top: 30px;">
+                <div style="background-color: #ebebeb;padding: 15px 15px 30px;margin: 0px;">
                     <a href="<?php echo $proposition["number"]; ?>/contributions/no">More Contributions to Yes
                         on <?php echo $proposition_number; ?></a>
                 </div>
@@ -335,32 +338,32 @@
 
             <?php } else { ?>
 
-                <div style="margin-top: 30px;">
+                <div style="background-color: #ebebeb;padding: 15px 15px 30px;margin: 0px;">
                     No contributions have been reported to the Yes on <?php echo $proposition["number"]; ?> campaign.
 
                 </div>
             <?php } ?>
         </div>
 
-        <div class="col-md-6">
-            <h4>
-                No on Prop <?php echo $proposition_number; ?>
+        <div class="col-xs-6">
+            <h4 style="background-color: #ebebeb;margin: 0px;padding: 15px;">
+                <span style="color:#054376;">No</span> on Prop <?php echo $proposition_number; ?>
             </h4>
 
             <?php if (isset($proposition['top_contributors']['OPPOSE'])) { ?>
                 <?php $showMoreLink = true; ?>
                 <?php foreach ($proposition['top_contributors']['OPPOSE'] as $item) { ?>
-                    <div class="row" style="margin-bottom: 10px;">
-                        <div class="col-xs-6">
+                    <div class="row" style="background-color: #ebebeb;padding: 10px 0px;margin: 0px;">
+                        <div class="col-xs-6" style="width: 50%;">
                             <?php echo $item->Donor; ?><br/>
                             <?php if ($proposition['top_contributors']['show_unitemized_oppose'] && $item->Date == null) { ?>
                                 <?php $showMoreLink = false; ?>
                                 <span style="font-size:12px;"> <?php echo $proposition['unitemized_text'] ?></span>
                             <?php } else { ?>
-                                <span style="font-size:12px; color: #767676;"> <?php echo $item->Date; ?></span>
+                                <span style="font-size:12px; color: #6a6a6a;"> <?php echo $item->Date; ?></span>
                             <?php } ?>
                         </div>
-                        <div style="padding-right: 100px;text-align: right;" class="col-xs-6">
+                        <div class="col-xs-6" style="text-align: right;width:50%">
                             <?php echo $item->Amount; ?>
                         </div>
                     </div>
@@ -368,7 +371,7 @@
                 <?php } ?>
 
                 <?php if($showMoreLink) { ?>
-                <div style="margin-top: 30px;">
+                <div style="background-color: #ebebeb;padding: 15px 15px 30px;margin: 0px;">
                     <a href="<?php echo $proposition["number"]; ?>/contributions/no">More Contributions to No
                         on <?php echo $proposition_number; ?></a>
                 </div>
@@ -376,7 +379,7 @@
 
             <?php } else { ?>
 
-                <div style="margin-top: 30px;">
+                <div style="background-color: #ebebeb;padding: 15px 15px 30px;margin: 0px;">
                     No contributions have been reported to the No on <?php echo $proposition["number"]; ?> campaign.
 
                 </div>
@@ -504,7 +507,7 @@
         </div>
     </div>
 
-    <div style="text-align: center;margin-top: 20px;" class="row">
+    <div style="text-align: center;margin-top: 20px;" class="row hidden-xs hidden-sm">
         <div style="vertical-align: middle;" class="col-md-6">
             <div class="form-group"
 

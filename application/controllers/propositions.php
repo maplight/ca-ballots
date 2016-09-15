@@ -49,7 +49,7 @@ class Propositions extends CI_Controller {
 
 
 
-        $this->load->view('header');
+        $this->load->view('header', $data);
         $this->load->view('proposition', $data);
         $this->load->view('footer');
     }
@@ -60,7 +60,7 @@ class Propositions extends CI_Controller {
         $data['elections'] = $this->proposition->get_election_dates();
         $data['election_date'] = $election_date;
 
-       $this->load->view('header');
+       $this->load->view('header', $data);
        $this->load->view('propositions', $data);
        $this->load->view('footer');
     }

@@ -1,4 +1,4 @@
-<div style="margin-top: 30px; padding-top: 30px; padding-left: 15px;">
+<div class="props_overview">
     <div style="display: inline;"><span
             style="font-size: 1.688em;font-weight:bold;">California Ballot Measures</span><span
             style="font-size: 14px;"> in the </span></div>
