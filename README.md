@@ -1,9 +1,6 @@
-# CodeIgniter 2
-Open Source PHP Framework (originally from EllisLab)
+# California Quick Guide to Propositions
+The Quick Guide to Propositions is one of the easiest ways for Californians to get key information about statewide ballot measures.  It provides an overview of each measure that's easy to understand - as well as important information about who is funding campaigns for and against the measures.
 
-For more info, please refer to the user-guide at http://www.codeigniter.com/userguide2/  
-(also available within the download package for offline use)
+Built in partnership between [MapLight](http://maplight.org/) and the Secretary of State, the Quick Guide to Propositions launched on October 13, 2016 at [https://quickguidetoprops.sos.ca.gov](https://quickguidetoprops.sos.ca.gov). 
 
-**WARNING:** *CodeIgniter 2.x is no longer under development and only receives security patches until October 31st, 2015.
-Please update your installation to the latest CodeIgniter 3.x version available
-(upgrade instructions [here](http://www.codeigniter.com/userguide3/installation/upgrade_300.html)).*
+Development of the Quick Guide to Props was generously funded with a grant from The James Irvine Foundation with the goal of improving political transparency in California.
