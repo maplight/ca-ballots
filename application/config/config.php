@@ -22,7 +22,7 @@
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://localhost:8888/ca-ballots';
+$config['base_url'] = '';
 
 /*
 |--------------------------------------------------------------------------
@@ -364,11 +364,6 @@ $config['rewrite_short_tags'] = FALSE;
 |
 */
 $config['proxy_ips'] = '';
-
-
-// The date of the next election, used in various places as 
-// the default date to get propositions, handle routing, etc.
-$config['next_election_date'] = '2016-11-08';
 
 
 /* End of file config.php */

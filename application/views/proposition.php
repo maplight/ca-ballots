@@ -1,4 +1,4 @@
-<div style="vertical-align: middle;" class="nav">
+<div style="vertical-align: middle;float:right" class="nav">
     <div class="form-inline" style="float: right;">
         <?php
         $totalProps = count($propositions["propositions"]);
@@ -56,14 +56,14 @@
                 <button class="btn btn-default dropdown-toggle prop_dropdown" type="button" id="dropdownMenu1"
                         data-toggle="dropdown" aria- haspopup="true" aria-expanded="true">
                     Prop <?php echo $currentProp; ?>
-                    <span class="caret"></span>
+                    <span class="glyphicon glyphicon-triangle-bottom" aria-hidden="true"></span>
                 </button>
                 <ul class="dropdown-menu prop-dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
                     <?php
                     foreach ($propositions["propositions"] as $proposition_item) {
                         ?>
                         <li>
-                            <a href="<?php echo base_url() . 'propositions/' . $this->uri->segment(2) . '/' . $proposition_item->number; ?>">
+                            <a href="<?php echo base_url() . 'propositions/' . $this->uri->segment(2) . '/' . $proposition_item->number; ?>" style="text-decoration:none;">
                                 Prop <?php echo $proposition_item->number; ?>
                                 - <?php echo substr($proposition_item->name, 0, 50);
                                 if (strlen($proposition_item->name) > 50) {
@@ -88,44 +88,42 @@
 </div>
 
 
-<!-- prop $title should go here -->
-<div>
+<div class="prop-name-container">
     <div class="row no-gutter">
         <div class="col-sm-2">
-            <div style="font-size:20px; margin-bottom: -20px; margin-top: 20px; font-weight: bold;">PROP</div>
+            <div class="prop-top" style="font-size:20px; font-weight: bold;">PROP</div>
             <div style="font-size:55px;"><?php echo $proposition["number"]; ?></div>
         </div>
         <h1 class="col-sm-10 hidden-xs hidden-sm">
-            <?php echo $proposition['name']; ?>
+            <?php echo $proposition['text'][0]->Title; ?>
         </h1>
-        <h1 class="col-sm-10 hidden-md hidden-lg" style="font-size: 24px;">
-            <?php echo $proposition['name']; ?>
+        <h1 class="col-sm-10 hidden-md hidden-lg" style="font-size: 24px;margin-top:0px;">
+            <?php echo $proposition['text'][0]->Title; ?>
         </h1>
     </div>
 </div>
 
 
 <div>
-    <h3 class="section_headers">
+    <h2 class="section_headers">
         Summary
-    </h3>
+    </h2>
 
     <p><?php echo $proposition['text'][0]->Summary; ?></p>
 </div>
 
 
 <div>
-    <h3 class="section_headers">
+    <h2 class="section_headers">
         Money Raised
-    </h3>
+    </h2>
 
     <div>
         <p>
-            Chart depicts total fundraising by all committees primarily formed for and against
-            Prop <?php echo $proposition["number"]; ?>
+            Chart depicts total fundraising by all committees primarily formed for and against Prop <?php echo $proposition["number"]; ?>.  Totals are updated daily with contributions from <a href="http://powersearch.sos.ca.gov/" target="_blank">Power Search</a> and adjustments from the most recent Political Reform Division analysis.
         </p>
     </div>
-    <div id="chartContainer" class="container" style="height: 125px;width:80%;margin-left:0px;">
+    <div id="chartContainer" class="container chart-container">
 
     </div>
 
@@ -133,20 +131,13 @@
     $amountYesFormat = '${y}';
     $amountNoFormat = '${y}';
 
-    if ($proposition['money_raised'][0]->AmountNo >= 1000000) {
-        $amountNoFormat = '${y} million';
-    }
-    if ($proposition['money_raised'][0]->AmountYes >= 1000000) {
-        $amountYesFormat = '${y} million';
-    }
-
     ?>
 
 
     <div id="amountYesModId" data-amountraw="<?php echo $proposition['money_raised'][0]->AmountYes ?>"
-         data-amountmod="<?php echo $proposition['money_raised'][0]->AmountYesMod; ?>"></div>
+         data-amountmod="<?php echo $proposition['money_raised'][0]->AmountYesFormatted; ?>"></div>
     <div id="amountNoModId" data-amountraw=" <?php echo $proposition['money_raised'][0]->AmountNo ?>"
-         data-amountmod="<?php echo $proposition['money_raised'][0]->AmountNoMod; ?>"></div>
+         data-amountmod="<?php echo $proposition['money_raised'][0]->AmountNoFormatted; ?>"></div>
 
     <script type="text/javascript">
 
@@ -154,7 +145,7 @@
 				chart: {
                     type: 'bar',
                     renderTo: 'chartContainer',
-                    marginRight: 75
+                    marginRight: 90
                 },
                 title: {
                     text: null
@@ -162,9 +153,12 @@
                 subtitle: {
                     text: null
                 },
+                tooltip: {
+                    enabled: false
+                },
                 xAxis: {
                     type: 'category',
-                    categories: ['Yes on Prop <?php echo $currentProp; ?>', 'No on Prop <?php echo $currentProp; ?>'],
+                    categories: ['<div style="text-align:center;color:#0A6ABA;">Yes<div><div> on <?php echo $currentProp; ?></div>', '<div style="text-align:center;color:#054376;">No<div><div> on <?php echo $currentProp; ?></div>'],
                     title: {
                         text: null
                     },
@@ -172,8 +166,10 @@
                         style: {
                             fontSize: '16px',
                             fontFamily: 'sans-serif',
-                            fontWeight: 'normal'
-                        }
+                            fontWeight: 'normal',
+                            width: '50px'
+                        },
+                        useHTML: true
                     },
                     lineWidth: 0,
                     tickWidth: 0
@@ -201,18 +197,7 @@
                     dataLabels: {
                         enabled: true,
                         formatter: function () {
-                            var value =  $('#amountYesModId').data('amountmod');
-                            var rawValue = $('#amountYesModId').data('amountraw');
-                            if (rawValue >= 1000000) {
-                                value = value + ' million';
-                            }
-                            else {
-                                var number = numeral(value);
-
-                                value= number.format('0,0');
-
-                            }
-                            return '$' + value;
+                            return '$' + $('#amountYesModId').data('amountmod');
                         },
                         style: {
                             fontSize: '16px',
@@ -220,7 +205,8 @@
                             fontWeight: 'normal'
                         },
                         crop: false,
-                		overflow: 'none'
+                		overflow: 'none',
+                        y: 3
                     },
                     showInLegend: false,
                     pointWidth: 50,
@@ -228,7 +214,7 @@
                         {
                             color: "#0A6ABA",
                             y:  <?php echo $proposition['money_raised'][0]->AmountYes; ?>,
-                            name: 'Yes on Prop <?php echo $currentProp; ?>',
+                            name: '<div style="text-align:center;color:#0A6ABA;">Yes<div><div> on <?php echo $currentProp; ?></div>',
 
                         }
                     ]
@@ -237,17 +223,7 @@
                     dataLabels: {
                         enabled: true,
                         formatter: function () {
-                            var value =  $('#amountNoModId').data('amountmod');
-                            var rawValue = $('#amountNoModId').data('amountraw');
-                            if (rawValue >= 1000000) {
-                                value = value + ' million';
-                            }else{
-                                var number = numeral(value);
-
-                                value= number.format('0,0');
-
-                            }
-                            return '$' + value;
+                            return '$' + $('#amountNoModId').data('amountmod');
                         },
                         style: {
                             fontSize: '16px',
@@ -255,14 +231,15 @@
                             fontWeight: 'normal'
                         },
                         crop: false,
-                		overflow: 'none'
+                		overflow: 'none',
+                        y: -4
                     },
                     pointWidth: 50,
                     data: [
                         {
                             color: '#054376',
                             y:  <?php echo $proposition['money_raised'][0]->AmountNo; ?>,
-                            name: 'No on Prop <?php echo $currentProp; ?>',
+                            name: '<div style="text-align:center;color:#054376;">No<div><div> on <?php echo $currentProp; ?></div>',
                         }
                     ]
                 	}
@@ -282,49 +259,64 @@
 			});
 
     </script>
-
-    <div>
-    </div>
 </div>
 
 <div>
-    <h3 style="padding-top: 30px;" class="section_headers">
+    <h2 class="section_headers">
         Largest Contributions
-    </h3>
+    </h2>
 
     <div>
-        <p style="margin-top: 15px;">
-            Showing the 10 largest contributions, including any ties, to committees primarily formed for and against Prop
-            53.
-            Contributions between allied committees are excluded. For more information on funding for ballot measure
-            campaigns, visit our Campaign Finance <a href="http://powersearch.sos.ca.gov/" target="_blank">Power
-                Search</a>.
+        <p style="margin: 15px 0px;">
+            Showing the 10 largest contributions to committees formed primarily for and against Prop <?php echo $proposition_number; ?> in the election cycle when it appeared on the ballot. Contributions in earlier election cycles and contributions between allied committees are excluded. For more information on funding for ballot measure campaigns, visit our Campaign Finance <a href="http://powersearch.sos.ca.gov/" target="_blank">Power Search</a>.
         </p>
     </div>
 
+    <script>
+    function toggleUnitemizedText(elementId) {
+        var element = $('#'+elementId);
+        if (element.css('display') == 'none') {
+            element.css('display', 'block');    
+        }
+        else {
+            element.css('display', 'none');
+        }
+    }
+    </script>
 
     <div class="row">
-        <div class="col-xs-6" style="margin-bottom:30px;">
+        <div class="col-md-6" style="margin-bottom:30px;">
             <h4 style="background-color: #ebebeb;margin: 0px;padding: 15px;">
                 <span style="color:#0A6ABA;">Yes</span> on Prop <?php echo $proposition_number; ?>
             </h4>
 
             <?php if (isset($proposition['top_contributors']['SUPPORT'])) { ?>
-                <?php $showMoreYesLink = true; ?>
+                <?php 
+                // making this always false for now until we make this page
+                $showMoreYesLink = false; 
+                ?>
                 <?php foreach ($proposition['top_contributors']['SUPPORT'] as $item) { ?>
                     <div class="row" style="background-color: #ebebeb;padding: 10px 0px;margin: 0px;">
-                        <div class="col-xs-6" style="width: 50%;">
-                            <?php echo $item->Donor; ?><br/>
+                        <div class="col-xs-6" style="width: 60%;padding-right:0px;">
+                            <?php echo $item->Donor; ?>
                             <?php if ($proposition['top_contributors']['show_unitemized_support'] && $item->Date == null) { ?>
-                                <?php $showMoreYesLink = false; ?>
-                                <span style="font-size:12px;"> <?php echo $proposition['unitemized_text'] ?></span>
+                                <span class="glyphicon glyphicon-question-sign" onclick="toggleUnitemizedText('unitemized-yes-text');" aria-hidden="true" style="cursor: pointer;"></span>
+                            <?php } ?>
+                            <br/>
+                            <?php if ($proposition['top_contributors']['show_unitemized_support'] && $item->Date == null) { ?>
+                                <span/>
                             <?php } else { ?>
                                 <span style="font-size:12px; color: #6a6a6a;"> <?php echo $item->Date; ?></span>
                             <?php } ?>
                         </div>
-                        <div class="col-xs-6" style="text-align: right;width: 50%;">
+                        <div class="col-xs-6" style="text-align: right;width: 40%;">
                             <?php echo $item->Amount; ?>
                         </div>
+                        <?php if ($proposition['top_contributors']['show_unitemized_support'] && $item->Date == null) { ?>
+                            <div class="col-xs-12" id="unitemized-yes-text" style="font-size:12px;display:none;margin-top:5px;">
+                                <?php echo $proposition['unitemized_text'] ?>
+                            </div>
+                        <?php } ?>
                     </div>
 
                 <?php } ?>
@@ -338,34 +330,44 @@
 
             <?php } else { ?>
 
-                <div style="background-color: #ebebeb;padding: 15px 15px 30px;margin: 0px;">
-                    No contributions have been reported to the Yes on <?php echo $proposition["number"]; ?> campaign.
-
+                <div style="background-color: #ebebeb;padding: 10px 15px 30px;margin: 0px;">
+                    No contributions have been reported to the No on <?php echo $proposition["number"]; ?> campaign in the election cycle when it appeared on the ballot.
                 </div>
             <?php } ?>
         </div>
 
-        <div class="col-xs-6">
+        <div class="col-md-6">
             <h4 style="background-color: #ebebeb;margin: 0px;padding: 15px;">
                 <span style="color:#054376;">No</span> on Prop <?php echo $proposition_number; ?>
             </h4>
 
             <?php if (isset($proposition['top_contributors']['OPPOSE'])) { ?>
-                <?php $showMoreLink = true; ?>
+                <?php 
+                // making this always false for now until we make this page
+                $showMoreLink = false; 
+                ?>
                 <?php foreach ($proposition['top_contributors']['OPPOSE'] as $item) { ?>
                     <div class="row" style="background-color: #ebebeb;padding: 10px 0px;margin: 0px;">
-                        <div class="col-xs-6" style="width: 50%;">
-                            <?php echo $item->Donor; ?><br/>
+                        <div class="col-xs-6" style="width: 60%;padding-right:0px;">
+                            <?php echo $item->Donor; ?>
                             <?php if ($proposition['top_contributors']['show_unitemized_oppose'] && $item->Date == null) { ?>
-                                <?php $showMoreLink = false; ?>
-                                <span style="font-size:12px;"> <?php echo $proposition['unitemized_text'] ?></span>
+                                <span class="glyphicon glyphicon-question-sign" onclick="toggleUnitemizedText('unitemized-no-text');" aria-hidden="true" style="cursor: pointer;"></span>
+                            <?php } ?>
+                            <br/>
+                            <?php if ($proposition['top_contributors']['show_unitemized_oppose'] && $item->Date == null) { ?>
+                                <span/>
                             <?php } else { ?>
                                 <span style="font-size:12px; color: #6a6a6a;"> <?php echo $item->Date; ?></span>
                             <?php } ?>
                         </div>
-                        <div class="col-xs-6" style="text-align: right;width:50%">
+                        <div class="col-xs-6" style="text-align: right;width:40%">
                             <?php echo $item->Amount; ?>
                         </div>
+                        <?php if ($proposition['top_contributors']['show_unitemized_oppose'] && $item->Date == null) { ?>
+                            <div class="col-xs-12" id="unitemized-no-text" style="font-size:12px;display:none;margin-top:5px;">
+                                <?php echo $proposition['unitemized_text'] ?>
+                            </div>
+                        <?php } ?>
                     </div>
 
                 <?php } ?>
@@ -379,9 +381,8 @@
 
             <?php } else { ?>
 
-                <div style="background-color: #ebebeb;padding: 15px 15px 30px;margin: 0px;">
-                    No contributions have been reported to the No on <?php echo $proposition["number"]; ?> campaign.
-
+                <div style="background-color: #ebebeb;padding: 10px 15px 30px;margin: 0px;">
+                    No contributions have been reported to the No on <?php echo $proposition["number"]; ?> campaign in the election cycle when it appeared on the ballot.
                 </div>
             <?php } ?>
         </div>
@@ -391,71 +392,71 @@
 </div>
 
 <div>
-    <h3 class="section_headers ">
+    <h2 class="section_headers">
         What your vote means
-    </h3>
+    </h2>
 
     <div class="row">
         <div class="col-md-6">
             <!-- <div> -->
-            <h3 class="floated_section_sub_headers">
+            <h2 class="floated_section_sub_headers">
                 Yes
-            </h3>
+            </h2>
             <!-- <div style="position: absolute;bottom: 0px;"> -->
 
             <!-- </div> -->
-            <p>
+            <p style="margin-bottom: 10px;">
                 <?php echo $proposition['text'][0]->WhatYourVoteMeansYes; ?>
             </p>
         </div>
 
         <div class="col-md-6">
-            <h3 class="floated_section_sub_headers">
+            <h2 class="floated_section_sub_headers">
                 No
-            </h3>
+            </h2>
 
-            <p>
+            <p style="margin-bottom: 0px;">
                 <?php echo $proposition['text'][0]->WhatYourVoteMeansNo; ?>
             </p>
         </div>
     </div>
 </div>
 <div>
-    <h3 class="section_headers">
+    <h2 class="section_headers">
         More on Proposition <?php echo $proposition_number; ?>
-    </h3>
+    </h2>
 
     <p>
     	For background on Proposition <?php echo $proposition_number; ?>, an analysis by the legislative analyst, endorsements for and against the measure, and more...        
     </p>
     <ul>
-    	<li>Read the <a href="http://voterguide.sos.ca.gov/" target="_blank">California Information Voter Guide</a>.</li>
+    	<li>Read the <a href="http://voterguide.sos.ca.gov/" target="_blank">California Voter Information Guide</a>.</li>
     </ul>
 
 </div>
 
 <div>
-    <h3 class="section_headers">
+    <h2 class="section_headers">
         Arguments
-    </h3>
+    </h2>
 
     <div class="row">
         <div class="col-md-6">
-            <h3 class="floated_section_sub_headers">
+            <h2 class="floated_section_sub_headers">
                 Pro
-            </h3>
+            </h2>
 
-            <p>
+            <p style="margin-bottom: 10px;">
                 <?php echo $proposition['text'][0]->ArgumentsPro; ?>
             </p>
         </div>
 
         <div class="col-md-6">
-            <h3 class="floated_section_sub_headers">
+            <h2 class="floated_section_sub_headers">
                 Con
-            </h3>
+            </h2>
 
-            <p>
+            <p style="margin-bottom: 0px;">
                 <?php echo $proposition['text'][0]->ArgumentsCon; ?>
             </p>
         </div>
@@ -463,25 +464,25 @@
 </div>
 
 <div>
-    <h3 class="section_headers">
+    <h2 class="section_headers">
         Campaigns
-    </h3>
+    </h2>
 
     <div class="row">
         <div class="col-md-6">
-            <h3 class="floated_section_sub_headers_contact" style="margin-top: 10px;">
+            <h2 class="floated_section_sub_headers_contact" style="margin-top: 10px;">
                 For
-            </h3>
+            </h2>
 
-            <div>
+            <div style="margin-bottom: 10px;">
                 <?php echo $proposition['text'][0]->AdditionalInformationFor; ?>
             </div>
         </div>
 
         <div class="col-md-6">
-            <h3 class="floated_section_sub_headers_contact" style="margin-top: 10px;">
+            <h2 class="floated_section_sub_headers_contact" style="margin-top: 10px;">
                 Against
-            </h3>
+            </h2>
 
             <div><?php echo $proposition['text'][0]->AdditionalInformationAgainst; ?>
             </div>
@@ -489,9 +490,9 @@
     </div>
 </div>
 <div>
-    <h3 class="section_headers">
+    <h2 class="section_headers">
         Vote
-    </h3>
+    </h2>
 
     <div class="row">
         <div class="col-md-12">

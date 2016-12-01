@@ -38,8 +38,8 @@
 |
 */
 
-//$route['test'] = 'propositions/prop_obj_test/$1/$2';
-
+// $route['test'] = 'propositions/prop_obj_test/$1/$2';
+//////
 $route["propositions/(:any)/(:any)/contributions/(:any)"] = "propositions/view_contributions/$1/$2/$3";
 $route["propositions/(:any)/(:any)"] = "propositions/view_proposition/$1/$2";
 $route["propositions/(:any)"] = "propositions/view_election/$1";

@@ -19,9 +19,22 @@ class Propositions extends CI_Controller {
      */
     public function index()
     {
+        // $this->load->model('proposition');
+        // $election_date = "2016-11-08";
+        // $this->load_propositions($election_date);
         $this->load->model('proposition');
-        $election_date = "2016-11-08";
-        $this->load_propositions($election_date);
+        $data['elections'] = $this->proposition->get_election_dates();
+
+        if (count($data['elections']['proposition_elections']) > 1) {
+            $this->load->view('header', $data);
+            $this->load->view('pick_election', $data);
+            $this->load->view('footer');
+        }
+        else {
+            $this->load->helper('url');
+            redirect('/propositions/'.$data['elections']['proposition_elections'][0]->Election, 'refresh');
+            // $this->view_election($data['elections']['proposition_elections'][0]->Election);
+        }
     }
 
     public function view_election($election_date) {
@@ -43,11 +56,9 @@ class Propositions extends CI_Controller {
         $data['proposition_number'] = $proposition_number;
 
         $this->load->model('proposition');
+        $data['elections'] = $this->proposition->get_election_dates();
         $data['propositions'] = $this->proposition->get_propositions_by_election_date($election_date);
         $data['proposition'] = $this->proposition->get_full_proposition_object_by_id($proposition_number, $election_date)['prop_obj'];
-
-
-
 
         $this->load->view('header', $data);
         $this->load->view('proposition', $data);

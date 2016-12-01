@@ -74,29 +74,17 @@ class Proposition extends CI_Model
         $query = $this->db->get('caballot_propositions');
         $results['prop_obj']["money_raised"] = $query->result();
 
-//
-//        echo '<pre>';
-//        print_r($results['prop_obj']['money_raised'][0]->AmountYes);
-//        echo '<pre>';
-//        exit();
+        if(isset($results['prop_obj']['money_raised'][0])){    
+            $this->config->load('proposition_adjustments');
+            $prop_adjustments = $this->config->item('prop_adjustments');
 
+            // add adjustments to raw number
+            $results['prop_obj']['money_raised'][0]->AmountYes += $prop_adjustments[$results['prop_obj']['money_raised'][0]->PropositionID]['yes'];
+            $results['prop_obj']['money_raised'][0]->AmountNo += $prop_adjustments[$results['prop_obj']['money_raised'][0]->PropositionID]['no'];
 
-        if(isset($results['prop_obj']['money_raised'][0])){
-
-            if($results['prop_obj']['money_raised'][0]->AmountYes >= 1000000){
-                $results['prop_obj']["money_raised"][0]->AmountYesMod = substr(strval( $results['prop_obj']['money_raised'][0]->AmountYes / 1000000),0,4);//round($results['prop_obj']['money_raised'][0]->AmountYes, -4);
-            }else{
-                $results['prop_obj']["money_raised"][0]->AmountYesMod =  round($results['prop_obj']['money_raised'][0]->AmountYes, -3);
-            }
-
-            if($results['prop_obj']['money_raised'][0]->AmountNo >= 1000000){
-                $results['prop_obj']["money_raised"][0]->AmountNoMod = substr(strval( $results['prop_obj']['money_raised'][0]->AmountNo / 1000000),0,4);//round($results['prop_obj']['money_raised'][0]->AmountYes, -4);
-            }else{
-                $results['prop_obj']["money_raised"][0]->AmountNoMod =  round($results['prop_obj']['money_raised'][0]->AmountNo, -3);
-            }
-
-
-
+            // format for display
+            $results['prop_obj']["money_raised"][0]->AmountYesFormatted =  number_format($results['prop_obj']['money_raised'][0]->AmountYes, 0, "." , ",");
+            $results['prop_obj']["money_raised"][0]->AmountNoFormatted =  number_format($results['prop_obj']['money_raised'][0]->AmountNo, 0, "." , ",");            
         }
 
 
